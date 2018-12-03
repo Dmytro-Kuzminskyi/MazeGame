@@ -14,8 +14,7 @@ public class Game extends JFrame{
 	public static int columns = 20;
 	public static int panelSideSize = 25;
 	public static int map[][] = new int[rows][columns];
-	private static int endCoordX;
-	private static int endCoordY;
+	private Finish finish;
 	private Player player;
 	
 	public Game(String path) {
@@ -46,7 +45,7 @@ public class Game extends JFrame{
 					player.moveRight();
 				}
 				
-				if(player.getPositionX() == endCoordX && player.getPositionY() == endCoordY){
+				if(player.getPositionX() == finish.getPositionX() && player.getPositionY() == finish.getPositionY()){
 					JOptionPane.showMessageDialog(null, "Congratulations, you've beaten the level!", "End Game", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 				}
@@ -104,6 +103,7 @@ public class Game extends JFrame{
 	
 	private void drawMap() {
 		this.add(player);
+		finish = new Finish();
 		Tile tile = null;
 		for (int y = 0; y < rows; y++) {
 			for (int x = 0; x < columns; x++) {
@@ -111,16 +111,16 @@ public class Game extends JFrame{
 					tile = new Block();
 				} else {
 					tile = new Grass();
-					if(map[x][y] == 2){
+					if(map[x][y] == 2) {
 						player.setPositionX(x);
 						player.setPositionY(y);
 						player.setInitialTexture();
                     	player.setLocation(x*panelSideSize, y*panelSideSize);
                     	player.setVisible(true);
                     }
-                    if(map[x][y] == 3){
-                    	endCoordX = x;
-                    	endCoordY = y;
+                    if(map[x][y] == 3) {
+                    	finish.setPositionX(x);
+                    	finish.setPositionY(y);
                     }
 				}
 				tile.setSize(panelSideSize, panelSideSize);

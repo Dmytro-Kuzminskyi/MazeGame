@@ -47,23 +47,7 @@ public class Player extends Tile{
 	    	y++;
     	}
 	}
-	
-	public void setPositionX(int x) {
-		this.x = x;
-	}
-	
-	public int getPositionX() {
-		return x;
-	}
 
-	public void setPositionY(int y) {
-		this.y = y;
-	}
-	
-	public int getPositionY() {
-		return y;
-	}
-	
 	public void setInitialTexture() {
 		if (x == 0) setLookRight();
 		if (x == Game.columns - 1) setLookLeft();
@@ -86,6 +70,4 @@ public class Player extends Tile{
 	private void setLookDown() {
 		label.setIcon(new ImageIcon("src/res/playerLookDown.png"));
 	}
-	
-	
 }
