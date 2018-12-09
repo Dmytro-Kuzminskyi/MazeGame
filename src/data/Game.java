@@ -14,11 +14,14 @@ public class Game extends JFrame{
 	public static int columns = 20;
 	public static int panelSideSize = 25;
 	public static int map[][] = new int[rows][columns];
-	private Finish finish;
+	private TileManager tileManager;
+	private Tile tile;
 	private Player player;
+	private Finish finish;
 	
 	public Game(String path) {
 		player = new Player();
+		this.add(player);
 		this.setSize(columns*panelSideSize + 6, rows*panelSideSize + 29);
 		this.setTitle(getClass().getSimpleName());
 		this.setLayout(null);
@@ -67,6 +70,7 @@ public class Game extends JFrame{
 		try {
 			br = new BufferedReader(new FileReader(path));
 			StringBuilder sb = new StringBuilder();
+			tileManager = new TileManager(br.readLine());
 			String line = br.readLine();
 			while(line != null) {
 				sb.append(line);
@@ -102,31 +106,29 @@ public class Game extends JFrame{
 	}
 	
 	private void drawMap() {
-		this.add(player);
-		finish = new Finish();
-		Tile tile = null;
+		tile = null;
 		for (int y = 0; y < rows; y++) {
 			for (int x = 0; x < columns; x++) {
-				if (map[x][y] == 0) {
-					tile = new Block();
-				} else {
-					tile = new Grass();
-					if(map[x][y] == 2) {
-						player.setPositionX(x);
-						player.setPositionY(y);
-						player.setInitialTexture();
-                    	player.setLocation(x*panelSideSize, y*panelSideSize);
-                    	player.setVisible(true);
-                    }
-                    if(map[x][y] == 3) {
-                    	finish.setPositionX(x);
-                    	finish.setPositionY(y);
-                    }
-				}
+				tile = tileManager.createTile(map[x][y]);
+				tile.setPositionX(x);
+				tile.setPositionY(y);
 				tile.setSize(panelSideSize, panelSideSize);
 				tile.setLocation(x*panelSideSize, y*panelSideSize);
 				tile.setVisible(true);
 				this.add(tile);
+				if (map[x][y] == 2) {
+					player.setPositionX(x);
+					player.setPositionY(y);
+					player.setInitialTexture(tileManager);
+					player.setSize(panelSideSize, panelSideSize);
+					player.setLocation(x*panelSideSize, y*panelSideSize);
+					player.setVisible(true);
+				}
+				if (map[x][y] == 3) {
+					finish = new Finish();
+					finish.setPositionX(x);
+					finish.setPositionY(y);
+				}
 			}
 		}
 		repaint();

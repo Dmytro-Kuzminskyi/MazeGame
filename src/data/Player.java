@@ -5,11 +5,10 @@ import javax.swing.JLabel;
 
 public class Player extends Tile{
 	private int step;
-	private JLabel label;
+	private TileManager tileManager;
 	
 	public Player() {
 		step = Game.panelSideSize;
-		this.setSize(step, step);
 		label = new JLabel();
 		label.setBounds(0, 0, Game.panelSideSize, Game.panelSideSize);
 		this.setLayout(null);
@@ -17,7 +16,7 @@ public class Player extends Tile{
 	}
 	
 	public void moveLeft() {
-		setLookLeft();
+		setLookLeft(tileManager.getFactory());
 		if (x > 0 && Game.map[x - 1][y] != 0) {
 			this.setLocation(this.getX() - step, this.getY());
 			x--;
@@ -25,7 +24,7 @@ public class Player extends Tile{
 	}
 	
 	public void moveRight() {
-		setLookRight();
+		setLookRight(tileManager.getFactory());
 		if (x < Game.columns - 1 && Game.map[x + 1][y] != 0) {
 	    	this.setLocation(this.getX() + step, this.getY());
 	    	x++;
@@ -33,7 +32,7 @@ public class Player extends Tile{
 	}
 	
 	public void moveUp() {
-		setLookUp();
+		setLookUp(tileManager.getFactory());
 		if(y > 0 && Game.map[x][y - 1] != 0){
 	    	this.setLocation(this.getX(), this.getY() - step);
 	    	y--;
@@ -41,33 +40,46 @@ public class Player extends Tile{
 	}
 	
 	public void moveDown() {
-		setLookDown();
+		setLookDown(tileManager.getFactory());
 		if(y < Game.rows-1 && Game.map[x][y + 1] != 0){
 	    	this.setLocation(this.getX(), this.getY() + step);
 	    	y++;
     	}
 	}
 
-	public void setInitialTexture() {
-		if (x == 0) setLookRight();
-		if (x == Game.columns - 1) setLookLeft();
-		if (y == 0) setLookDown();
-		if (y == Game.rows - 1) setLookUp();
+	public void setInitialTexture(TileManager tileManager) {
+		this.tileManager = tileManager;
+		if (x == 0) setLookRight(tileManager.getFactory());
+		if (x == Game.columns - 1) setLookLeft(tileManager.getFactory());
+		if (y == 0) setLookDown(tileManager.getFactory());
+		if (y == Game.rows - 1) setLookUp(tileManager.getFactory());
 	}
 	
-	private void setLookRight() {
-		label.setIcon(new ImageIcon("src/res/playerLookRight.png"));
+	private void setLookRight(TileFactory factory) {
+		if (factory.getClass() == SpecialFactory.class) 
+			label.setIcon(new ImageIcon("src/res/playerLookRightSpecial.png"));
+		else 
+			label.setIcon(new ImageIcon("src/res/playerLookRight.png"));
 	}
 	
-	private void setLookLeft() {
-		label.setIcon(new ImageIcon("src/res/playerLookLeft.png"));
+	private void setLookLeft(TileFactory factory) {
+		if (factory.getClass() == SpecialFactory.class)
+			label.setIcon(new ImageIcon("src/res/playerLookLeftSpecial.png"));
+		else
+			label.setIcon(new ImageIcon("src/res/playerLookLeft.png"));
 	}
 	
-	private void setLookUp() {
-		label.setIcon(new ImageIcon("src/res/playerLookUp.png"));
+	private void setLookUp(TileFactory factory) {
+		if (factory.getClass() == SpecialFactory.class)
+			label.setIcon(new ImageIcon("src/res/playerLookUpSpecial.png"));
+		else
+			label.setIcon(new ImageIcon("src/res/playerLookUp.png"));
 	}
 	
-	private void setLookDown() {
-		label.setIcon(new ImageIcon("src/res/playerLookDown.png"));
+	private void setLookDown(TileFactory factory) {
+		if (factory.getClass() == SpecialFactory.class)
+			label.setIcon(new ImageIcon("src/res/playerLookDownSpecial.png"));
+		else
+			label.setIcon(new ImageIcon("src/res/playerLookDown.png"));
 	}
 }
